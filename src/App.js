@@ -1,21 +1,52 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
-import store from './store';
+import store from './Store/Store';
+import AuthAction from './Store/Actions/AuthActions';
+import { connect } from 'react-redux';
 
 class App extends React.Component {
-  componentDidMount() {
-    // store.getState();
-    store.dispatch({
-      type: "LOGIN_SUCCESSFULL"
-    })
+  state = {
 
-    console.log(store.getState());
   }
+
+  static getDerivedStateFromProps(nextProps, state) {
+    console.log("nextProps_________", nextProps);
+
+    return {
+      auth: nextProps.auth
+    }
+  }
+
+  componentDidMount() {
+    store.dispatch(AuthAction.authentication());
+
+    setTimeout(() => {
+      store.dispatch(AuthAction.authenticationSuccessfull({
+        name: "Irfan Ali"
+      }));
+    }, 3000);
+  }
+
   render() {
     return (
       <h1>Hello World</h1>
     )
   }
 }
-export default App;
+
+const mapStateToProps = (state) => {
+  return {
+    auth: state.Auth
+  }
+}
+
+export default connect(mapStateToProps)(App)
+
+
+
+
+
+
+
+
